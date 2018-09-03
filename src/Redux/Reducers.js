@@ -1,11 +1,7 @@
 //Reducers
-export function onExpandCollapse(state = { isExpanded: false }, action) {
-  const { isExpanded } = state;
+export const expandCollapseSideNav = { type: "EXPAND_COLLAPSE_SIDENAV" };
+export const isCollapsedNav = { type: "COLLAPSE_NAV_ITEM" };
 
-  switch (action.type) {
-    case "EXPAND_COLLAPSE_SIDENAV":
-      return { isExpanded: !isExpanded };
-    default:
-      return state;
-  }
-}
+export const extendSubNav = (id, parent) => {
+  return { type: "COLLAPSE_NAV_ITEM", id, parent };
+};
