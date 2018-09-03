@@ -8,6 +8,7 @@
     "babel-preset-react": "6.24.1",
     "react": "16.4.2",
     "react-dom": "16.4.2",
+    "react-icons-kit": "1.1.7",
     "react-redux": "5.0.7",
     "react-scripts": "1.1.4",
     "redux": "4.0.0",

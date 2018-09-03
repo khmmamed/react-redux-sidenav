@@ -1,5 +1,7 @@
 import React, { Children, Component } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { extendSubNav } from "../Redux/Actions";
 
 const NavItemStyled = styled.div`
      padding: 8px 12px;
@@ -68,20 +70,31 @@ const CollapsedIndicator = styled.div`
         width: ${props => (props.size ? props.size : "0.25em")};
     }
 `;
+
 class Nav extends Component {
   render() {
-    const { children, highlightBgColor } = this.props;
+    const { children, extendNavItems, isExtendToSubNav, parent } = this.props;
     const icon = findIcon(children);
     const text = findText(children);
+
+    console.log(isExtendToSubNav + "  " + parent);
     return (
       <div>
-        <NavItemStyled highlightBgColor="#00bcd4">
+        <NavItemStyled
+          highlightBgColor="#00bcd4"
+          onClick={(e, data) => {
+            console.log(e.target.innerHTML);
+            console.log(data);
+            extendNavItems(e.target.innerHTML, parent);
+          }}
+        >
           <NavIconCont>
             {icon && icon.props ? icon.props.children : null}
           </NavIconCont>
           <NavTextCont>
             {text && text.props ? text.props.children : null}
           </NavTextCont>
+
           {hasChildNav(children) ? (
             <div
               style={{
@@ -90,10 +103,32 @@ class Nav extends Component {
                 bottom: "4px"
               }}
             >
-              {<CollapsedIndicator collapsed={true} />}{" "}
+              {<CollapsedIndicator collapsed={isExtendToSubNav} />}{" "}
             </div>
           ) : null}
         </NavItemStyled>
+        <div
+          style={{
+            marginLeft: 10
+          }}
+        >
+          {Children.toArray(children)
+            .filter(child => child.type === Nav && !isExtendToSubNav)
+            .map((child, idx) => {
+              const sicon = findIcon(child.props.children);
+              const stext = findText(child.props.children);
+              return (
+                <NavItemStyled>
+                  <NavIconCont>
+                    {sicon ? sicon.props.children : null}
+                  </NavIconCont>
+                  <NavTextCont>
+                    {stext ? stext.props.children : null}
+                  </NavTextCont>
+                </NavItemStyled>
+              );
+            })}
+        </div>
       </div>
     );
   }

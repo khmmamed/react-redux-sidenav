@@ -1,8 +1,7 @@
-import React, { Component, Children } from "react";
+import React, { cloneElement, Component, Children } from "react";
 import styled from "styled-components";
 
 const Sidenav = styled.div`
-	
 	position: absolute;
     top: 0;
     bottom: 0;
@@ -15,14 +14,22 @@ const Sidenav = styled.div`
 
 class SideNav extends Component {
   render() {
-    const { children, isExpanded, clickToExpand } = this.props;
-
+    const {
+      children,
+      isExpanded,
+      clickToExpand,
+      extendNavItems,
+      isExtendToSubNav
+    } = this.props;
     return (
       <Sidenav expanded={isExpanded}>
         <button onClick={clickToExpand}>Expand</button>
 
         {Children.toArray(children).map(child => {
-          return child;
+          return cloneElement(child, {
+            extendNavItems: extendNavItems,
+            isExtendToSubNav: isExtendToSubNav
+          });
         })}
       </Sidenav>
     );
